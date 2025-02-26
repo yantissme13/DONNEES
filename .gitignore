@@ -1,0 +1,5 @@
+# Ne pas versionner les fichiers sensibles
+.env
+
+# Ne pas versionner les dépendances installées
+node_modules/
