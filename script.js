@@ -1,8 +1,9 @@
-/* script.js */
+const API_BASE_URL = "https://mon-projet.up.railway.app"; // Remplace par ton URL Railway
+
 document.addEventListener("DOMContentLoaded", fetchOdds);
 
 async function fetchOdds() {
-    const response = await fetch("/odds");
+    const response = await fetch(`${API_BASE_URL}/odds`);
     const odds = await response.json();
     displayOdds(odds);
 }
@@ -11,7 +12,8 @@ async function filterOdds() {
     const start = document.getElementById("start").value;
     const end = document.getElementById("end").value;
     if (!start || !end) return;
-    const response = await fetch(`/odds/filter?start=${start}&end=${end}`);
+    
+    const response = await fetch(`${API_BASE_URL}/odds/filter?start=${start}&end=${end}`);
     const odds = await response.json();
     displayOdds(odds);
 }
