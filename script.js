@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://mon-projet.up.railway.app"; // Remplace par ton URL Railway
+const API_BASE_URL = "https://donnees-production.up.railway.app"; // Remplace par ton URL Railway
 
 document.addEventListener("DOMContentLoaded", fetchOdds);
 
