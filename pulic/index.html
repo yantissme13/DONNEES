@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau des Cotes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Liste des Cotes</h1>
+        <div class="filter">
+            <label for="start">Date de début:</label>
+            <input type="date" id="start">
+            <label for="end">Date de fin:</label>
+            <input type="date" id="end">
+            <button onclick="filterOdds()">Filtrer</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Sport</th>
+                    <th>Événement</th>
+                    <th>Bookmaker 1</th>
+                    <th>Cote 1</th>
+                    <th>Bookmaker 2</th>
+                    <th>Cote 2</th>
+                    <th>Profit (%)</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody id="odds-table"></tbody>
+        </table>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

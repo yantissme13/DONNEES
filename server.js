@@ -1,3 +1,13 @@
+const path = require("path");
+
+// Servir les fichiers HTML, CSS et JS depuis "public"
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+
 // server.js - Backend Express pour récupérer et filtrer les cotes
 require('dotenv').config();
 const express = require('express');
