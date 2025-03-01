@@ -1,28 +1,26 @@
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
 const path = require("path");
+const { connectDB, Odds } = require('./database');
 
-// Servir les fichiers HTML, CSS et JS depuis "public"
+const app = express(); // ✅ Définir 'app' ici avant de l'utiliser
+
+app.use(cors());
+app.use(express.json());
+
+// 📌 Servir le frontend statique depuis "public"
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-
-// server.js - Backend Express pour récupérer et filtrer les cotes
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const { connectDB, Odds } = require('./database');
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-// Connexion à MongoDB
+// 📌 Connexion à MongoDB
 connectDB();
 
-// Endpoint pour récupérer toutes les cotes (triées par timestamp décroissant)
+// 📌 Endpoint API pour récupérer les cotes
 app.get('/odds', async (req, res) => {
     try {
         const odds = await Odds.find().sort({ timestamp: -1 });
@@ -32,7 +30,7 @@ app.get('/odds', async (req, res) => {
     }
 });
 
-// Endpoint pour filtrer les cotes par intervalle de dates
+// 📌 Endpoint API pour filtrer par date
 app.get('/odds/filter', async (req, res) => {
     try {
         const { start, end } = req.query;
@@ -51,6 +49,6 @@ app.get('/odds/filter', async (req, res) => {
     }
 });
 
+// 📌 Démarrage du serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`✅ Serveur lancé sur le port ${PORT}`));
-
