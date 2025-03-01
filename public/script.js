@@ -37,7 +37,7 @@ function updateStats(totalBets, totalROI) {
     console.log("Mise à jour des stats - Nombre de paris :", totalBets, "Total ROI:", totalROI);
     let avgROI = totalBets > 0 ? (totalROI / totalBets).toFixed(2) : "0.00";
     
-    document.getElementById("total-bets").textContent = totalBets;
+    document.getElementById("total-bets").textContent = String(totalBets);
     document.getElementById("total-roi").textContent = avgROI + "%";
 }
 
