@@ -36,6 +36,9 @@ async function filterOdds() {
 function displayOdds(odds) {
     const tableBody = document.getElementById("odds-table");
     tableBody.innerHTML = "";
+    let totalROI = 0;
+    let countBets = 0;
+    
     odds.forEach(odd => {
         const row = document.createElement("tr");
         row.innerHTML = `
@@ -49,22 +52,25 @@ function displayOdds(odds) {
             <td>${new Date(odd.timestamp).toLocaleString()}</td>
         `;
         tableBody.appendChild(row);
+        
+        totalROI += parseFloat(odd.profit || 0);
+        countBets++;
     });
-    updateStats(odds); // ✅ Mise à jour immédiate après affichage
+    
+    updateStats(countBets, totalROI); // ✅ Mise à jour immédiate après affichage
 }
 
-function switchTab(tabId) {
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active-tab'));
-    document.getElementById(tabId).classList.add('active-tab');
-}
-
-function updateStats(odds) {
-    const totalBets = odds.length;
-    let totalROI = odds.reduce((sum, odd) => sum + parseFloat(odd.profit || 0), 0);
+function updateStats(totalBets, totalROI) {
     let avgROI = totalBets > 0 ? (totalROI / totalBets).toFixed(2) : "0.00";
 
     document.getElementById("total-bets").textContent = totalBets;
     document.getElementById("total-roi").textContent = avgROI + "%";
+}
+
+// ✅ Fonction pour gérer le changement d'onglet
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active-tab'));
+    document.getElementById(tabId).classList.add('active-tab');
 }
 
 function updateBookmakers(odds) {
