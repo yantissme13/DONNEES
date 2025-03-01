@@ -34,15 +34,21 @@ async function filterOdds() {
 }
 
 function updateStats(odds) {
+    if (!Array.isArray(odds)) {
+        console.error("❌ ERREUR : 'odds' n'est pas un tableau", odds);
+        return;
+    }
+
     let totalBets = odds.length;
-    let totalROI = odds.reduce((sum, odd) => sum + parseFloat(odd.profit || 0), 0);
+    let totalROI = odds.reduce((sum, odd) => sum + (parseFloat(odd.profit) || 0), 0);
     let avgROI = totalBets > 0 ? (totalROI / totalBets).toFixed(2) : "0.00";
 
-    console.log("Mise à jour des stats - Nombre de paris :", totalBets, "Total ROI:", avgROI);
+    console.log("✅ Mise à jour des stats - Nombre de paris :", totalBets, "Total ROI:", avgROI);
 
     document.getElementById("total-bets").textContent = totalBets;
     document.getElementById("total-roi").textContent = avgROI + "%";
 }
+
 
 function displayOdds(odds) {
     const tableBody = document.getElementById("odds-table");
