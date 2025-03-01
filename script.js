@@ -33,6 +33,14 @@ async function filterOdds() {
     }
 }
 
+function updateStats(totalBets, totalROI) {
+    console.log("Mise à jour des stats - Nombre de paris :", totalBets, "Total ROI:", totalROI);
+    let avgROI = totalBets > 0 ? (totalROI / totalBets).toFixed(2) : "0.00";
+    
+    document.getElementById("total-bets").textContent = totalBets;
+    document.getElementById("total-roi").textContent = avgROI + "%";
+}
+
 function displayOdds(odds) {
     const tableBody = document.getElementById("odds-table");
     tableBody.innerHTML = "";
@@ -58,13 +66,6 @@ function displayOdds(odds) {
     });
     
     updateStats(countBets, totalROI); // ✅ Mise à jour immédiate après affichage
-}
-
-function updateStats(totalBets, totalROI) {
-    let avgROI = totalBets > 0 ? (totalROI / totalBets).toFixed(2) : "0.00";
-
-    document.getElementById("total-bets").textContent = totalBets;
-    document.getElementById("total-roi").textContent = avgROI + "%";
 }
 
 // ✅ Fonction pour gérer le changement d'onglet
