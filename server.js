@@ -5,22 +5,14 @@ const cors = require('cors');
 const path = require("path");
 const { connectDB, Odds } = require('./database');
 
-const app = express(); // ✅ Définir 'app' ici avant de l'utiliser
-
+const app = express();
 app.use(cors());
 app.use(express.json());
-
-// 📌 Servir le frontend statique depuis "public"
-app.use(express.static(path.join(__dirname, "public")));
-
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
-});
 
 // 📌 Connexion à MongoDB
 connectDB();
 
-// 📌 Endpoint API pour récupérer les cotes
+// 📌 1️⃣ Définir les routes API AVANT le frontend
 app.get('/odds', async (req, res) => {
     try {
         const odds = await Odds.find().sort({ timestamp: -1 });
@@ -30,7 +22,6 @@ app.get('/odds', async (req, res) => {
     }
 });
 
-// 📌 Endpoint API pour filtrer par date
 app.get('/odds/filter', async (req, res) => {
     try {
         const { start, end } = req.query;
@@ -49,6 +40,13 @@ app.get('/odds/filter', async (req, res) => {
     }
 });
 
-// 📌 Démarrage du serveur
+// 📌 2️⃣ Ensuite, servir le frontend
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// 📌 3️⃣ Démarrer le serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`✅ Serveur lancé sur le port ${PORT}`));
