@@ -53,6 +53,11 @@ function displayOdds(odds) {
     updateStats(odds); // ✅ Mise à jour immédiate après affichage
 }
 
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active-tab'));
+    document.getElementById(tabId).classList.add('active-tab');
+}
+
 function updateStats(odds) {
     const totalBets = odds.length;
     let totalROI = odds.reduce((sum, odd) => sum + parseFloat(odd.profit || 0), 0);
@@ -60,6 +65,7 @@ function updateStats(odds) {
 
     document.getElementById("total-bets").textContent = totalBets;
     document.getElementById("total-roi").textContent = avgROI + "%";
+}
 
 function updateBookmakers(odds) {
     let bookmakers = {};
