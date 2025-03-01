@@ -1,0 +1,131 @@
+/* style.css */
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    text-align: center;
+    margin: 20px;
+}
+
+.container {
+    max-width: 90%;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+/* ✅ Style des onglets */
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.tab-button:hover {
+    background-color: #45a049;
+}
+
+.tab-content {
+    display: none;
+}
+
+.active-tab {
+    display: block;
+}
+
+/* ✅ Style pour le nombre de paris et le ROI */
+.stats {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/* ✅ Style pour la liste des bookmakers */
+.bookmakers-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 80%;
+    margin: auto;
+}
+
+.bookmaker-item {
+    background: #eee;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.bookmaker-item:hover {
+    background: #ddd;
+}
+
+.bookmaker-details {
+    display: none;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.bookmaker-item.active .bookmaker-details {
+    display: block;
+}
+
+/* ✅ Style des tableaux */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+th {
+    background: #4CAF50;
+    color: white;
+}
+
+/* ✅ Mettre le profit en doré */
+td.profit {
+    color: #FFD700;
+    font-weight: bold;
+}
+
+/* ✅ Responsive */
+@media (max-width: 768px) {
+    th, td {
+        font-size: 12px;
+        padding: 5px;
+    }
+    table {
+        font-size: 14px;
+    }
+}
