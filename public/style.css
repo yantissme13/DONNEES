@@ -62,28 +62,47 @@ body {
 }
 
 .bookmaker-item {
-    background: #eee;
-    padding: 10px;
-    margin: 5px;
+    background: #f8f8f8;
+    padding: 12px;
+    margin: 8px 0;
     border-radius: 5px;
-    width: 100%;
     cursor: pointer;
+    font-weight: bold;
+    text-align: left;
+    border: 1px solid #ddd;
+    width: 100%;
 }
 
 .bookmaker-item:hover {
-    background: #ddd;
+    background: #e0e0e0;
 }
 
-.bookmaker-details {
-    display: none;
-    background: #f9f9f9;
-    padding: 10px;
-    border-radius: 5px;
+/* ✅ Style pour la liste déroulante des paris */
+.bookmaker-bet-list {
+    list-style-type: none;
+    padding-left: 15px;
+    background: #ffffff;
+    border-left: 3px solid #4CAF50;
     margin-top: 5px;
+    display: none;
 }
 
-.bookmaker-item.active .bookmaker-details {
-    display: block;
+.bookmaker-bet-list li {
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.bookmaker-bet-list li:last-child {
+    border-bottom: none;
+}
+
+/* ✅ Amélioration de la visibilité du toggle [+/-] */
+.bookmaker-item span {
+    float: right;
+    font-size: 18px;
+    color: #4CAF50;
+    font-weight: bold;
 }
 
 /* ✅ Style des tableaux */

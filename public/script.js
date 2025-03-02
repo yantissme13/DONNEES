@@ -111,8 +111,38 @@ function updateBookmakers(odds) {
 
     Object.keys(bookmakers).forEach(bookmaker => {
         let li = document.createElement("li");
+        li.classList.add("bookmaker-item"); // ✅ Améliore la lisibilité
         li.innerHTML = `<strong>${bookmaker}</strong> - ${bookmakers[bookmaker].count} paris <br>
                         <strong>ROI moyen :</strong> ${(bookmakers[bookmaker].totalROI / bookmakers[bookmaker].count).toFixed(2)}%`;
+
+        let toggleIndicator = document.createElement("span");
+        toggleIndicator.textContent = " [+]";
+        li.appendChild(toggleIndicator);
+
+        let betList = document.createElement("ul");
+        betList.classList.add("bookmaker-bet-list");
+        betList.style.display = "none"; // Cache la liste par défaut
+
+        bookmakers[bookmaker].bets.forEach(bet => {
+            let betItem = document.createElement("li");
+            betItem.innerHTML = `${bet.event} - ${new Date(bet.timestamp).toLocaleString()}<br>
+                                 <strong>${bet.bookmaker1} (${bet.best_odds1})</strong> vs 
+                                 <strong>${bet.bookmaker2} (${bet.best_odds2})</strong> - Profit: <span class="profit">${bet.profit}%</span>`;
+            betList.appendChild(betItem);
+        });
+
+        li.appendChild(betList);
+
+        li.addEventListener("click", () => {
+            if (betList.style.display === "none") {
+                betList.style.display = "block";
+                toggleIndicator.textContent = " [-]";
+            } else {
+                betList.style.display = "none";
+                toggleIndicator.textContent = " [+]";
+            }
+        });
+
         bookmakerList.appendChild(li);
 
         let option1 = document.createElement("option");
@@ -126,6 +156,7 @@ function updateBookmakers(odds) {
         bookmaker2Select.appendChild(option2);
     });
 }
+
 
 
 function filterByBookmakers() {
