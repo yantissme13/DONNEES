@@ -79,7 +79,7 @@ function displayOdds(odds) {
         countBets++;
     });
     
-    updateStats(countBets, totalROI); // ✅ Mise à jour immédiate après affichage
+    updateStats(odds);
 }
 
 // ✅ Fonction pour gérer le changement d'onglet
