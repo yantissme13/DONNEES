@@ -3,6 +3,7 @@ const API_BASE_URL = "https://donnees-production.up.railway.app";
 document.addEventListener("DOMContentLoaded", fetchOdds);
 
 let allBets = [];
+let allBetsFiltered = [];
 
 async function fetchOdds() {
     try {
@@ -29,8 +30,9 @@ async function filterOdds() {
         const response = await fetch(`${API_BASE_URL}/odds/filter?start=${start}T${startTime}&end=${end}T${endTime}`);
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const odds = await response.json();
+        allBetsFiltered = odds; // ✅ Stocke les paris filtrés
         displayOdds(odds);
-        updateStats(odds); // ✅ Mise à jour des stats après filtrage
+        updateBookmakers(odds); // ✅ Applique le filtrage aux bookmakers
     } catch (error) {
         console.error("Erreur lors du filtrage des cotes :", error);
     }
@@ -125,12 +127,13 @@ function updateBookmakers(odds) {
     });
 }
 
+
 function filterByBookmakers() {
     let selectedBookmaker1 = document.getElementById("bookmaker1").value;
     let selectedBookmaker2 = document.getElementById("bookmaker2").value;
     if (!selectedBookmaker1 || !selectedBookmaker2) return;
 
-    let filteredBets = allBets.filter(event =>
+    let filteredBets = allBetsFiltered.filter(event =>
         (event.bookmaker1 === selectedBookmaker1 && event.bookmaker2 === selectedBookmaker2) ||
         (event.bookmaker1 === selectedBookmaker2 && event.bookmaker2 === selectedBookmaker1)
     );
@@ -139,6 +142,15 @@ function filterByBookmakers() {
     filteredBetsTable.innerHTML = "";
 
     let totalROI = 0;
+    let totalOpportunities = filteredBets.length;
+
+    if (filteredBets.length === 0) {
+        filteredBetsTable.innerHTML = "<tr><td colspan='6'>Aucun pari trouvé</td></tr>";
+        document.getElementById("filtered-roi").textContent = "0%";
+        document.getElementById("filtered-opportunities").textContent = "0";
+        return;
+    }
+
     filteredBets.forEach(event => {
         let row = document.createElement("tr");
         row.innerHTML = `<td>${event.event}</td>
@@ -152,4 +164,6 @@ function filterByBookmakers() {
     });
 
     document.getElementById("filtered-roi").textContent = (totalROI / filteredBets.length).toFixed(2) + "%";
+    document.getElementById("filtered-opportunities").textContent = totalOpportunities;
 }
+
