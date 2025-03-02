@@ -33,7 +33,10 @@
                 <label for="end-time">Heure de fin:</label>
                 <input type="time" id="end-time">
 
-                <button onclick="filterOdds()">Filtrer</button>
+                <label for="min-profit">Profit minimum (%):</label>
+				<input type="number" id="min-profit" step="0.1" placeholder="Ex: 20.4">
+				<button onclick="filterOdds()">Filtrer</button>
+
             </div>
             <table>
                 <thead>

@@ -25,11 +25,17 @@ async function filterOdds() {
         const startTime = document.getElementById("start-time").value || "00:00";
         const end = document.getElementById("end").value;
         const endTime = document.getElementById("end-time").value || "23:59";
+        const minProfit = parseFloat(document.getElementById("min-profit").value) || 0; // ✅ Ajout du critère de profit
         if (!start || !end) return;
-        
+
         const response = await fetch(`${API_BASE_URL}/odds/filter?start=${start}T${startTime}&end=${end}T${endTime}`);
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const odds = await response.json();
+
+        let odds = await response.json();
+
+        // ✅ Appliquer le filtre sur le profit
+        odds = odds.filter(odd => parseFloat(odd.profit) >= minProfit);
+
         allBetsFiltered = odds; // ✅ Stocke les paris filtrés
         displayOdds(odds);
         updateBookmakers(odds); // ✅ Applique le filtrage aux bookmakers
@@ -37,6 +43,7 @@ async function filterOdds() {
         console.error("Erreur lors du filtrage des cotes :", error);
     }
 }
+
 
 function updateStats(odds) {
     if (!Array.isArray(odds)) {
