@@ -2,11 +2,14 @@ const API_BASE_URL = "https://donnees-production.up.railway.app";
 
 document.addEventListener("DOMContentLoaded", fetchOdds);
 
+let allBets = [];
+
 async function fetchOdds() {
     try {
         const response = await fetch(`${API_BASE_URL}/odds`);
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const odds = await response.json();
+		allBets = odds;
         displayOdds(odds);
         updateBookmakers(odds);
         updateStats(odds); // ✅ Mise à jour des stats après affichage
