@@ -45,11 +45,35 @@ body {
     display: block;
 }
 
-/* ✅ Style pour le nombre de paris et le ROI */
-.stats {
-    font-size: 18px;
-    margin-bottom: 10px;
-    font-weight: bold;
+/* ✅ Style pour les champs de filtrage */
+.filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-container input, .filter-container select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+    max-width: 200px;
+}
+
+.filter-container button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.filter-container button:hover {
+    background-color: #45a049;
 }
 
 /* ✅ Style pour la liste des bookmakers */
@@ -113,7 +137,7 @@ body {
 
 table {
     width: 100%;
-    table-layout: fixed;
+    table-layout: auto;
     border-collapse: collapse;
     margin-top: 20px;
 }
@@ -122,9 +146,9 @@ th, td {
     border: 1px solid #ddd;
     padding: 10px;
     text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 th {
@@ -146,5 +170,14 @@ td.profit {
     }
     table {
         font-size: 14px;
+    }
+
+    .filter-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .filter-container input, .filter-container select {
+        max-width: 100%;
     }
 }
