@@ -52,10 +52,11 @@ function setPresetFilter(type) {
 
 async function filterOdds() {
     try {
-        const start = document.getElementById("start").value;
-        const end = document.getElementById("end").value;
-		const startTime = document.getElementById("start-time").value || "00:00";
-		const endTime = document.getElementById("end-time").value || "23:59";
+        let start = document.getElementById("start").value;
+		let startTime = document.getElementById("start-time").value || "00:00";
+		let end = document.getElementById("end").value;
+		let endTime = document.getElementById("end-time").value || "23:59";
+
 
 		// ✅ Corriger le décalage horaire en enlevant une heure
 		let startDateTime = new Date(`${start}T${startTime}`);
