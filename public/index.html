@@ -21,6 +21,13 @@
         </div>
 
         <!-- ✅ Onglet des événements -->
+		<div class="preset-filters">
+			<button onclick="setPresetFilter('year')">📅 Toute l'année</button>
+			<button onclick="setPresetFilter('month')">📆 Tout le mois</button>
+			<button onclick="setPresetFilter('week')">🗓 Toute la semaine</button>
+			<button onclick="setPresetFilter('24h')">⏳ Dernières 24h</button>
+		</div>
+
         <div id="events-tab" class="tab-content active-tab">
             <div class="filter">
                 <label for="start">Date de début:</label>

@@ -19,12 +19,57 @@ async function fetchOdds() {
     }
 }
 
+function setPresetFilter(type) {
+    let now = new Date();
+    let startDate = new Date();
+
+    if (type === 'year') {
+        startDate.setFullYear(now.getFullYear(), 0, 1);
+        startDate.setHours(0, 0, 0);
+    } else if (type === 'month') {
+        startDate.setDate(1);
+        startDate.setHours(0, 0, 0);
+    } else if (type === 'week') {
+        let dayOfWeek = now.getDay(); // Jour actuel (0 = Dimanche, 1 = Lundi...)
+        startDate.setDate(now.getDate() - dayOfWeek);
+        startDate.setHours(0, 0, 0);
+    } else if (type === '24h') {
+        startDate.setHours(now.getHours() - 24);
+    }
+
+    // ✅ Corrige le décalage horaire (enlève une heure)
+    startDate.setHours(startDate.getHours() - 1);
+    now.setHours(now.getHours() - 1);
+
+    // ✅ Appliquer les dates aux inputs
+    document.getElementById("start").value = startDate.toISOString().split("T")[0];
+    document.getElementById("start-time").value = startDate.toTimeString().split(" ")[0].slice(0, 5);
+    document.getElementById("end").value = now.toISOString().split("T")[0];
+    document.getElementById("end-time").value = now.toTimeString().split(" ")[0].slice(0, 5);
+	filterOdds();
+
+}
+
 async function filterOdds() {
     try {
         const start = document.getElementById("start").value;
-        const startTime = document.getElementById("start-time").value || "00:00";
         const end = document.getElementById("end").value;
-        const endTime = document.getElementById("end-time").value || "23:59";
+		const startTime = document.getElementById("start-time").value || "00:00";
+		const endTime = document.getElementById("end-time").value || "23:59";
+
+		// ✅ Corriger le décalage horaire en enlevant une heure
+		let startDateTime = new Date(`${start}T${startTime}`);
+		startDateTime.setHours(startDateTime.getHours() - 1);
+
+		let endDateTime = new Date(`${end}T${endTime}`);
+		endDateTime.setHours(endDateTime.getHours() - 1);
+
+		// ✅ Convertir les nouvelles valeurs corrigées
+		start = startDateTime.toISOString().split("T")[0];
+		startTime = startDateTime.toTimeString().split(" ")[0].slice(0, 5);
+		end = endDateTime.toISOString().split("T")[0];
+		endTime = endDateTime.toTimeString().split(" ")[0].slice(0, 5);
+
         const minProfit = parseFloat(document.getElementById("min-profit").value) || 0; // ✅ Ajout du critère de profit
         if (!start || !end) return;
 
