@@ -107,6 +107,7 @@ function updateStats(odds) {
 
     document.getElementById("total-bets").textContent = totalBets;
     document.getElementById("total-roi").textContent = avgROI + "%";
+	document.getElementById("total-roi-total").textContent = roiTotal + "%";
 }
 
 
