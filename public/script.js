@@ -126,12 +126,11 @@ function displayOdds(odds) {
 
 	const parisTimestamp = new Date(odd.timestamp);
 
-	// ✅ Correction : Afficher directement l'heure locale sans double conversion
-	const formattedTimestamp = parisTimestamp.getFullYear() + "-" +
-	                           String(parisTimestamp.getMonth() + 1).padStart(2, "0") + "-" +
-	                           String(parisTimestamp.getDate()).padStart(2, "0") + " " +
-	                           String(parisTimestamp.getHours()).padStart(2, "0") + ":" +
-	                           String(parisTimestamp.getMinutes()).padStart(2, "0");
+	// ✅ Correction : S'assurer que l'heure locale est affichée sans décalage
+	const formattedTimestamp = parisTimestamp.toLocaleString("fr-FR", {
+	    timeZone: "UTC" // Affichage direct en UTC pour éviter tout décalage
+	});
+
 
 	console.log("📌 Timestamps API :", odds.map(o => o.timestamp));
 	console.log("📌 Timestamps affichés :", odds.map(o => {
