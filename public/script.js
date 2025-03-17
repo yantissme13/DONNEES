@@ -115,9 +115,14 @@ function displayOdds(odds) {
     tableBody.innerHTML = "";
     let totalROI = 0;
     let countBets = 0;
-    
+
     odds.forEach(odd => {
         const row = document.createElement("tr");
+
+        // Convertir le timestamp du pari dans le fuseau horaire "Europe/Paris"
+        const parisTimestamp = new Date(odd.timestamp);
+        const formattedTimestamp = parisTimestamp.toLocaleString("en-US", { timeZone: "Europe/Paris" });
+
         row.innerHTML = `
             <td>${odd.sport}</td>
             <td>${odd.event}</td>
@@ -126,16 +131,17 @@ function displayOdds(odds) {
             <td>${odd.bookmaker2}</td>
             <td>${odd.best_odds2}</td>
             <td class="profit">${odd.profit}%</td>
-            <td>${new Date(odd.timestamp).toLocaleString()}</td>
+            <td>${formattedTimestamp}</td>  <!-- Affichage avec fuseau horaire "Europe/Paris" -->
         `;
         tableBody.appendChild(row);
         
         totalROI += parseFloat(odd.profit || 0);
         countBets++;
     });
-    
+
     updateStats(odds);
 }
+
 
 // ✅ Fonction pour gérer le changement d'onglet
 function switchTab(tabId) {
