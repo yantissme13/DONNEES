@@ -52,23 +52,23 @@ function setPresetFilter(type) {
 async function filterOdds() {
     try {
         let start = document.getElementById("start").value;
-		let startTime = document.getElementById("start-time").value || "00:00";
-		let end = document.getElementById("end").value;
-		let endTime = document.getElementById("end-time").value || "23:59";
+        let startTime = document.getElementById("start-time").value || "00:00";
+        let end = document.getElementById("end").value;
+        let endTime = document.getElementById("end-time").value || "23:59";
 
+        // ✅ Corriger le décalage horaire en ajustant les dates aux fuseaux horaires
+        let startDateTime = new Date(`${start}T${startTime}`);
+        let endDateTime = new Date(`${end}T${endTime}`);
 
-		// ✅ Corriger le décalage horaire en enlevant une heure
-		let startDateTime = new Date(`${start}T${startTime}`);
-		startDateTime.setHours(startDateTime.getHours() - 1);
+        // Appliquer le fuseau horaire de "Europe/Paris"
+        startDateTime = new Date(startDateTime.toLocaleString("en-US", { timeZone: "Europe/Paris" }));
+        endDateTime = new Date(endDateTime.toLocaleString("en-US", { timeZone: "Europe/Paris" }));
 
-		let endDateTime = new Date(`${end}T${endTime}`);
-		endDateTime.setHours(endDateTime.getHours() - 1);
-
-		// ✅ Convertir les nouvelles valeurs corrigées
-		start = startDateTime.toISOString().split("T")[0];
-		startTime = startDateTime.toTimeString().split(" ")[0].slice(0, 5);
-		end = endDateTime.toISOString().split("T")[0];
-		endTime = endDateTime.toTimeString().split(" ")[0].slice(0, 5);
+        // Convertir les nouvelles valeurs corrigées
+        start = startDateTime.toISOString().split("T")[0];
+        startTime = startDateTime.toTimeString().split(" ")[0].slice(0, 5);
+        end = endDateTime.toISOString().split("T")[0];
+        endTime = endDateTime.toTimeString().split(" ")[0].slice(0, 5);
 
         const minProfit = parseFloat(document.getElementById("min-profit").value) || 0; // ✅ Ajout du critère de profit
         if (!start || !end) return;
