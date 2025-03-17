@@ -120,10 +120,8 @@ function displayOdds(odds) {
     odds.forEach(odd => {
         const row = document.createElement("tr");
 
-        // Convertir le timestamp du pari dans le fuseau horaire "Europe/Paris"
-        const parisTimestamp = new Date(odd.timestamp);
-        
-        // Si le timestamp est déjà en UTC, on le convertit en heure locale "Europe/Paris"
+        // Convertir le timestamp du pari en UTC puis l'afficher en heure locale "Europe/Paris"
+        const parisTimestamp = new Date(odd.timestamp); // Timestamp en UTC
         const formattedTimestamp = parisTimestamp.toLocaleString("fr-FR", { timeZone: "Europe/Paris" });
 
         row.innerHTML = `
@@ -134,16 +132,17 @@ function displayOdds(odds) {
             <td>${odd.bookmaker2}</td>
             <td>${odd.best_odds2}</td>
             <td class="profit">${odd.profit}%</td>
-            <td>${formattedTimestamp}</td>  <!-- Affichage avec fuseau horaire "Europe/Paris" -->
+            <td>${formattedTimestamp}</td> <!-- Affichage avec fuseau horaire "Europe/Paris" -->
         `;
         tableBody.appendChild(row);
-        
+
         totalROI += parseFloat(odd.profit || 0);
         countBets++;
     });
 
     updateStats(odds);
 }
+
 
 
 
