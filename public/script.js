@@ -124,9 +124,24 @@ function displayOdds(odds) {
     odds.forEach(odd => {
         const row = document.createElement("tr");
 
-        // Convertir le timestamp du pari en UTC puis l'afficher en heure locale "Europe/Paris"
-        const parisTimestamp = new Date(odd.timestamp); // Timestamp en UTC
-        const formattedTimestamp = parisTimestamp.toLocaleString("fr-FR", { timeZone: "Europe/Paris" });
+	const parisTimestamp = new Date(odd.timestamp);
+
+	// ✅ Correction : Afficher directement l'heure locale sans double conversion
+	const formattedTimestamp = parisTimestamp.getFullYear() + "-" +
+	                           String(parisTimestamp.getMonth() + 1).padStart(2, "0") + "-" +
+	                           String(parisTimestamp.getDate()).padStart(2, "0") + " " +
+	                           String(parisTimestamp.getHours()).padStart(2, "0") + ":" +
+	                           String(parisTimestamp.getMinutes()).padStart(2, "0");
+
+	console.log("📌 Timestamps API :", odds.map(o => o.timestamp));
+	console.log("📌 Timestamps affichés :", odds.map(o => {
+	    let betTime = new Date(o.timestamp);
+	    return betTime.getFullYear() + "-" +
+	           String(betTime.getMonth() + 1).padStart(2, "0") + "-" +
+	           String(betTime.getDate()).padStart(2, "0") + " " +
+	           String(betTime.getHours()).padStart(2, "0") + ":" +
+	           String(betTime.getMinutes()).padStart(2, "0");
+	}));
 
         row.innerHTML = `
             <td>${odd.sport}</td>
