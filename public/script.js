@@ -75,10 +75,12 @@ async function filterOdds() {
         const minProfit = parseFloat(document.getElementById("min-profit").value) || 0; // ✅ Ajout du critère de profit
         if (!start || !end) return;
 
-        const response = await fetch(`${API_BASE_URL}/odds/filter?start=${startDateTime.toISOString()}&end=${endDateTime.toISOString()}`);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        // Filtrer les paris localement en lisant la colonne timestamp
+	let odds = allBets.filter(odd => {
+	    let betTime = new Date(odd.timestamp); // Convertit le timestamp du pari
+	    return betTime >= startDateTime && betTime <= endDateTime;
+	});
 
-        let odds = await response.json();
 
         // ✅ Appliquer le filtre sur le profit
         odds = odds.filter(odd => parseFloat(odd.profit) >= minProfit);
