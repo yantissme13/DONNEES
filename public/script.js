@@ -9,15 +9,24 @@ async function fetchOdds() {
     try {
         const response = await fetch(`${API_BASE_URL}/odds`);
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const odds = await response.json();
-		allBets = odds;
+        let odds = await response.json();
+
+        // ✅ Ajout d'une heure aux timestamps des paris
+        odds = odds.map(odd => {
+            let correctedTimestamp = new Date(odd.timestamp);
+            correctedTimestamp.setHours(correctedTimestamp.getHours() + 1); // Ajoute 1h
+            return { ...odd, timestamp: correctedTimestamp.toISOString() }; // Stocke la version corrigée
+        });
+
+        allBets = odds;
         displayOdds(odds);
         updateBookmakers(odds);
-        updateStats(odds); // ✅ Mise à jour des stats après affichage
+        updateStats(odds);
     } catch (error) {
         console.error("Erreur lors de la récupération des cotes :", error);
     }
 }
+
 
 function setPresetFilter(type) {
     let now = new Date();
