@@ -90,6 +90,7 @@ async function filterOdds() {
 }
 
 
+
 function updateStats(odds) {
     if (!Array.isArray(odds)) {
         console.error("❌ ERREUR : 'odds' n'est pas un tableau", odds);
@@ -121,7 +122,9 @@ function displayOdds(odds) {
 
         // Convertir le timestamp du pari dans le fuseau horaire "Europe/Paris"
         const parisTimestamp = new Date(odd.timestamp);
-        const formattedTimestamp = parisTimestamp.toLocaleString("en-US", { timeZone: "Europe/Paris" });
+        
+        // Si le timestamp est déjà en UTC, on le convertit en heure locale "Europe/Paris"
+        const formattedTimestamp = parisTimestamp.toLocaleString("fr-FR", { timeZone: "Europe/Paris" });
 
         row.innerHTML = `
             <td>${odd.sport}</td>
@@ -141,6 +144,7 @@ function displayOdds(odds) {
 
     updateStats(odds);
 }
+
 
 
 // ✅ Fonction pour gérer le changement d'onglet
