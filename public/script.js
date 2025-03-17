@@ -37,17 +37,16 @@ function setPresetFilter(type) {
         startDate.setHours(now.getHours() - 24);
     }
 
-    // ✅ Corrige le décalage horaire (enlève une heure)
-    startDate.setHours(startDate.getHours() - 1);
-    now.setHours(now.getHours() - 1);
+    // ✅ Corrige le décalage horaire pour "Europe/Paris"
+    startDate = new Date(startDate.toLocaleString("en-US", { timeZone: "Europe/Paris" }));
+    now = new Date(now.toLocaleString("en-US", { timeZone: "Europe/Paris" }));
 
-    // ✅ Appliquer les dates aux inputs
+    // Applique les dates aux inputs
     document.getElementById("start").value = startDate.toISOString().split("T")[0];
     document.getElementById("start-time").value = startDate.toTimeString().split(" ")[0].slice(0, 5);
     document.getElementById("end").value = now.toISOString().split("T")[0];
     document.getElementById("end-time").value = now.toTimeString().split(" ")[0].slice(0, 5);
-	filterOdds();
-
+    filterOdds();
 }
 
 async function filterOdds() {
