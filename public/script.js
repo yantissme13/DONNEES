@@ -30,24 +30,26 @@ function setPresetFilter(type) {
         startDate.setDate(1);
         startDate.setHours(0, 0, 0);
     } else if (type === 'week') {
-        let dayOfWeek = now.getDay(); // Jour actuel (0 = Dimanche, 1 = Lundi...)
+        let dayOfWeek = now.getDay();
         startDate.setDate(now.getDate() - dayOfWeek);
         startDate.setHours(0, 0, 0);
     } else if (type === '24h') {
         startDate.setHours(now.getHours() - 24);
     }
 
-    // ✅ Corrige le décalage horaire pour "Europe/Paris"
-    startDate = new Date(startDate.toLocaleString("en-US", { timeZone: "Europe/Paris" }));
-    now = new Date(now.toLocaleString("en-US", { timeZone: "Europe/Paris" }));
+    // ✅ Correction : Ajuster l’heure UTC sans conversion forcée
+    startDate = new Date(startDate.getTime() - (startDate.getTimezoneOffset() * 60000));
+    now = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
 
-    // Applique les dates aux inputs
+    // Appliquer les dates aux inputs en UTC
     document.getElementById("start").value = startDate.toISOString().split("T")[0];
-    document.getElementById("start-time").value = startDate.toTimeString().split(" ")[0].slice(0, 5);
+    document.getElementById("start-time").value = startDate.toISOString().split("T")[1].slice(0, 5);
     document.getElementById("end").value = now.toISOString().split("T")[0];
-    document.getElementById("end-time").value = now.toTimeString().split(" ")[0].slice(0, 5);
+    document.getElementById("end-time").value = now.toISOString().split("T")[1].slice(0, 5);
+
     filterOdds();
 }
+
 
 async function filterOdds() {
     try {
@@ -61,8 +63,8 @@ async function filterOdds() {
         let endDateTime = new Date(`${end}T${endTime}`);
 
         // Appliquer le fuseau horaire de "Europe/Paris"
-        startDateTime = new Date(startDateTime.toLocaleString("en-US", { timeZone: "Europe/Paris" }));
-        endDateTime = new Date(endDateTime.toLocaleString("en-US", { timeZone: "Europe/Paris" }));
+        startDateTime = new Date(startDateTime.getTime() - (startDateTime.getTimezoneOffset() * 60000));
+	endDateTime = new Date(endDateTime.getTime() - (endDateTime.getTimezoneOffset() * 60000));
 
         // Convertir les nouvelles valeurs corrigées
         start = startDateTime.toISOString().split("T")[0];
@@ -73,7 +75,7 @@ async function filterOdds() {
         const minProfit = parseFloat(document.getElementById("min-profit").value) || 0; // ✅ Ajout du critère de profit
         if (!start || !end) return;
 
-        const response = await fetch(`${API_BASE_URL}/odds/filter?start=${start}T${startTime}&end=${end}T${endTime}`);
+        const response = await fetch(`${API_BASE_URL}/odds/filter?start=${startDateTime.toISOString()}&end=${endDateTime.toISOString()}`);
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
         let odds = await response.json();
