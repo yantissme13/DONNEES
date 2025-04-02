@@ -169,6 +169,8 @@ function displayOdds(odds) {
     });
 
     updateStats(odds);
+	updateChart(odds);
+
 }
 
 
@@ -308,4 +310,74 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     checkDataLoaded();
 });
+
+let chartInstance = null;
+
+function updateChart(data) {
+    const ctx = document.getElementById('mainChart').getContext('2d');
+    const granularity = document.getElementById('granularity').value;
+
+    const grouped = {};
+
+    data.forEach(odd => {
+        const date = new Date(odd.timestamp);
+        let key;
+
+        if (granularity === "hour") {
+            key = `${date.toISOString().split("T")[0]} ${date.getHours().toString().padStart(2, '0')}h`;
+        } else if (granularity === "day") {
+            key = date.toISOString().split("T")[0];
+        } else if (granularity === "month") {
+            key = date.toISOString().slice(0, 7); // "YYYY-MM"
+        }
+
+        if (!grouped[key]) grouped[key] = [];
+        grouped[key].push(parseFloat(odd.profit));
+    });
+
+    const labels = Object.keys(grouped).sort();
+    const dataPoints = labels.map(label => {
+        const values = grouped[label];
+        return (values.reduce((a, b) => a + b, 0) / values.length).toFixed(2);
+    });
+
+    if (chartInstance) chartInstance.destroy();
+
+    chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                label: 'ROI moyen',
+                data: dataPoints,
+                backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                borderColor: 'rgba(76, 175, 80, 1)',
+                borderWidth: 2,
+                tension: 0.3,
+                pointRadius: 4,
+                fill: true
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    min: 0,
+                    max: 100,
+                    title: { display: true, text: "ROI (%)" }
+                },
+                x: {
+                    title: { display: true, text: "Temps" }
+                }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+}
+
+function updateMainChart() {
+    updateChart(allBetsFiltered);
+}
+
 

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau des Cotes</title>
     <link rel="stylesheet" href="style.css">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 	<!-- Loader -->
@@ -17,6 +18,7 @@
 	<div id="main-content" style="display: none;">
 
 		<div class="container">
+
 			<h1>Liste des Cotes</h1>
 			
 			<!-- Affichage du nombre total de paris -->
@@ -38,6 +40,16 @@
 				<button onclick="setPresetFilter('week')">🗓 Toute la semaine</button>
 				<button onclick="setPresetFilter('24h')">⏳ Dernières 24h</button>
 			</div>
+			<!-- Sélecteur de granularité pour le graphique -->
+			<div style="margin-bottom: 15px;">
+				<label for="granularity">Granularité du graphique :</label>
+				<select id="granularity" onchange="updateMainChart()">
+					<option value="hour">🕒 Par heure</option>
+					<option value="day" selected>📆 Par jour</option>
+					<option value="month">📅 Par mois</option>
+				</select>
+			</div>
+
 
 			<div id="events-tab" class="tab-content active-tab">
 				<div class="filter">
@@ -56,6 +68,7 @@
 					<button onclick="filterOdds()">Filtrer</button>
 
 				</div>
+				<canvas id="mainChart" style="max-width: 100%; height: 300px;"></canvas>
 				<table>
 					<thead>
 						<tr>
