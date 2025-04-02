@@ -5,6 +5,26 @@ document.addEventListener("DOMContentLoaded", fetchOdds);
 
 let allBets = [];
 let allBetsFiltered = [];
+let sessionCachedOdds = null;
+
+function loadFromCache() {
+    const cached = localStorage.getItem("odds_cache");
+    if (cached) {
+        sessionCachedOdds = JSON.parse(cached);
+        allBets = sessionCachedOdds;
+        allBetsFiltered = sessionCachedOdds;
+        displayOdds(allBets);
+        updateBookmakers(allBets);
+        updateStats(allBets);
+        console.log("✅ Données chargées depuis le cache localStorage.");
+        return true;
+    }
+    return false;
+}
+
+function saveToCache(data) {
+    localStorage.setItem("odds_cache", JSON.stringify(data));
+}
 
 async function fetchOdds() {
     try {
@@ -20,6 +40,7 @@ async function fetchOdds() {
         });
 
         allBets = odds;
+		saveToCache(odds);
         displayOdds(odds);
         updateBookmakers(odds);
         updateStats(odds);
@@ -293,10 +314,12 @@ function filterByBookmakers() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    await fetchOdds(); // Appelle d'abord les données
-
     const loader = document.getElementById("loader");
     const mainContent = document.getElementById("main-content");
+
+    loadFromCache(); // ✅ Affiche les données en cache si présentes
+
+    await fetchOdds(); // 🔁 Recharge les vraies données ensuite
 
     const checkDataLoaded = () => {
         const rows = document.querySelectorAll("#odds-table tr");
@@ -310,6 +333,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     checkDataLoaded();
 });
+
 
 let chartInstance = null;
 
@@ -381,3 +405,7 @@ function updateMainChart() {
 }
 
 
+// Nettoyage du cache quand on quitte la page
+window.onbeforeunload = () => {
+    localStorage.removeItem("odds_cache");
+};
