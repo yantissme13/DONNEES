@@ -202,3 +202,27 @@ td.profit {
 .preset-filters button:hover {
     background-color: #1E88E5;
 }
+
+/* ✅ Loader - écran de chargement */
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4CAF50;
+    animation: fadein 1s ease-in-out;
+}
+
+/* ✅ Petite animation de fondu */
+@keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

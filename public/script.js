@@ -1,3 +1,4 @@
+
 const API_BASE_URL = "https://donnees-production.up.railway.app";
 
 document.addEventListener("DOMContentLoaded", fetchOdds);
@@ -288,4 +289,23 @@ function filterByBookmakers() {
     document.getElementById("filtered-roi").textContent = (totalROI / filteredBets.length).toFixed(2) + "%";
     document.getElementById("filtered-opportunities").textContent = totalOpportunities;
 }
+
+document.addEventListener("DOMContentLoaded", async () => {
+    await fetchOdds(); // Appelle d'abord les données
+
+    const loader = document.getElementById("loader");
+    const mainContent = document.getElementById("main-content");
+
+    const checkDataLoaded = () => {
+        const rows = document.querySelectorAll("#odds-table tr");
+        if (rows.length > 0) {
+            loader.style.display = "none";
+            mainContent.style.display = "block";
+        } else {
+            setTimeout(checkDataLoaded, 300);
+        }
+    };
+
+    checkDataLoaded();
+});
 

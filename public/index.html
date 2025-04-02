@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,95 +8,103 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Liste des Cotes</h1>
-        
-        <!-- Affichage du nombre total de paris -->
-        <p><strong>Nombre total de paris affichés :</strong> <span id="total-bets">0</span></p>
-        <p><strong>ROI moyen :</strong> <span id="total-roi">0%</span></p>
-		<p><strong>ROI total :</strong> <span id="total-roi-total">0%</span></p>
+	<!-- Loader -->
+	<div id="loader" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+		<h2>Chargement des données en cours...</h2>
+	</div>
+
+	<!-- Contenu principal -->
+	<div id="main-content" style="display: none;">
+
+		<div class="container">
+			<h1>Liste des Cotes</h1>
+			
+			<!-- Affichage du nombre total de paris -->
+			<p><strong>Nombre total de paris affichés :</strong> <span id="total-bets">0</span></p>
+			<p><strong>ROI moyen :</strong> <span id="total-roi">0%</span></p>
+			<p><strong>ROI total :</strong> <span id="total-roi-total">0%</span></p>
 
 
-        <!-- Onglets -->
-        <div class="tabs">
-            <button class="tab-button active" onclick="switchTab('events-tab')">Tous les Paris</button>
-            <button class="tab-button" onclick="switchTab('bookmakers-tab')">Bookmakers</button>
-        </div>
+			<!-- Onglets -->
+			<div class="tabs">
+				<button class="tab-button active" onclick="switchTab('events-tab')">Tous les Paris</button>
+				<button class="tab-button" onclick="switchTab('bookmakers-tab')">Bookmakers</button>
+			</div>
 
-        <!-- ✅ Onglet des événements -->
-		<div class="preset-filters">
-			<button onclick="setPresetFilter('year')">📅 Toute l'année</button>
-			<button onclick="setPresetFilter('month')">📆 Tout le mois</button>
-			<button onclick="setPresetFilter('week')">🗓 Toute la semaine</button>
-			<button onclick="setPresetFilter('24h')">⏳ Dernières 24h</button>
+			<!-- ✅ Onglet des événements -->
+			<div class="preset-filters">
+				<button onclick="setPresetFilter('year')">📅 Toute l'année</button>
+				<button onclick="setPresetFilter('month')">📆 Tout le mois</button>
+				<button onclick="setPresetFilter('week')">🗓 Toute la semaine</button>
+				<button onclick="setPresetFilter('24h')">⏳ Dernières 24h</button>
+			</div>
+
+			<div id="events-tab" class="tab-content active-tab">
+				<div class="filter">
+					<label for="start">Date de début:</label>
+					<input type="date" id="start">
+					<label for="start-time">Heure de début:</label>
+					<input type="time" id="start-time">
+
+					<label for="end">Date de fin:</label>
+					<input type="date" id="end">
+					<label for="end-time">Heure de fin:</label>
+					<input type="time" id="end-time">
+
+					<label for="min-profit">Profit minimum (%):</label>
+					<input type="number" id="min-profit" step="0.1" placeholder="Ex: 20.4">
+					<button onclick="filterOdds()">Filtrer</button>
+
+				</div>
+				<table>
+					<thead>
+						<tr>
+							<th>League</th>
+							<th>Événement</th>
+							<th>Bookmaker 1</th>
+							<th>Cote 1</th>
+							<th>Bookmaker 2</th>
+							<th>Cote 2</th>
+							<th>Profit (%)</th>
+							<th>Timestamp</th>
+						</tr>
+					</thead>
+					<tbody id="odds-table"></tbody>
+				</table>
+			</div>
+
+			<!-- ✅ Onglet des Bookmakers -->
+			<div id="bookmakers-tab" class="tab-content">
+				<h2>Liste des Bookmakers</h2>
+				<ul id="bookmaker-list"></ul>
+
+				<h3>Comparer deux bookmakers :</h3>
+				<select id="bookmaker1">
+					<option value="">Sélectionner un bookmaker</option>
+				</select>
+				<select id="bookmaker2">
+					<option value="">Sélectionner un bookmaker</option>
+				</select>
+				<button onclick="filterByBookmakers()">Afficher les paris croisés</button>
+				<p><strong>ROI entre ces bookmakers :</strong> <span id="filtered-roi">0%</span></p>
+				<p><strong>Nombre d'opportunités :</strong> <span id="filtered-opportunities">0</span></p>
+
+				<table>
+					<thead>
+						<tr>
+							<th>Événement</th>
+							<th>Bookmaker 1</th>
+							<th>Cote 1</th>
+							<th>Bookmaker 2</th>
+							<th>Cote 2</th>
+							<th>Profit (%)</th>
+						</tr>
+					</thead>
+					<tbody id="filtered-bets"></tbody>
+				</table>
+			</div>
 		</div>
-
-        <div id="events-tab" class="tab-content active-tab">
-            <div class="filter">
-                <label for="start">Date de début:</label>
-                <input type="date" id="start">
-                <label for="start-time">Heure de début:</label>
-                <input type="time" id="start-time">
-
-                <label for="end">Date de fin:</label>
-                <input type="date" id="end">
-                <label for="end-time">Heure de fin:</label>
-                <input type="time" id="end-time">
-
-                <label for="min-profit">Profit minimum (%):</label>
-				<input type="number" id="min-profit" step="0.1" placeholder="Ex: 20.4">
-				<button onclick="filterOdds()">Filtrer</button>
-
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>League</th>
-                        <th>Événement</th>
-                        <th>Bookmaker 1</th>
-                        <th>Cote 1</th>
-                        <th>Bookmaker 2</th>
-                        <th>Cote 2</th>
-                        <th>Profit (%)</th>
-                        <th>Timestamp</th>
-                    </tr>
-                </thead>
-                <tbody id="odds-table"></tbody>
-            </table>
-        </div>
-
-        <!-- ✅ Onglet des Bookmakers -->
-        <div id="bookmakers-tab" class="tab-content">
-            <h2>Liste des Bookmakers</h2>
-            <ul id="bookmaker-list"></ul>
-
-            <h3>Comparer deux bookmakers :</h3>
-            <select id="bookmaker1">
-                <option value="">Sélectionner un bookmaker</option>
-            </select>
-            <select id="bookmaker2">
-                <option value="">Sélectionner un bookmaker</option>
-            </select>
-            <button onclick="filterByBookmakers()">Afficher les paris croisés</button>
-            <p><strong>ROI entre ces bookmakers :</strong> <span id="filtered-roi">0%</span></p>
-			<p><strong>Nombre d'opportunités :</strong> <span id="filtered-opportunities">0</span></p>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Événement</th>
-                        <th>Bookmaker 1</th>
-                        <th>Cote 1</th>
-                        <th>Bookmaker 2</th>
-                        <th>Cote 2</th>
-                        <th>Profit (%)</th>
-                    </tr>
-                </thead>
-                <tbody id="filtered-bets"></tbody>
-            </table>
-        </div>
-    </div>
-    
-    <script src="script.js"></script>
+	</div> <!-- Fin de #main-content -->
+		<script src="script.js"></script>
 </body>
 </html>
