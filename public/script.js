@@ -316,12 +316,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	const progressInterval = setInterval(() => {
 		if (progress < 95) {
-			progress += 1;
+			progress += 0.1;
 			progressBarFill.style.width = progress + "%";
 		} else {
 			clearInterval(progressInterval); // on arrête la simulation à 95%
 		}
-	}, 20);
+	}, 50);
 
 
     const checkDataLoaded = () => {
