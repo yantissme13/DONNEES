@@ -148,30 +148,19 @@ function updateStats(odds) {
 
 function displayOdds(odds) {
     const tableBody = document.getElementById("odds-table");
-    tableBody.innerHTML = "";
+    const fragment = document.createDocumentFragment();
     let totalROI = 0;
     let countBets = 0;
 
     odds.forEach(odd => {
         const row = document.createElement("tr");
 
-	const parisTimestamp = new Date(odd.timestamp);
+		const parisTimestamp = new Date(odd.timestamp);
 
-	// ✅ Correction : S'assurer que l'heure locale est affichée sans décalage
-	const formattedTimestamp = parisTimestamp.toLocaleString("fr-FR", {
-	    timeZone: "UTC" // Affichage direct en UTC pour éviter tout décalage
-	});
-
-
-	console.log("📌 Timestamps API :", odds.map(o => o.timestamp));
-	console.log("📌 Timestamps affichés :", odds.map(o => {
-	    let betTime = new Date(o.timestamp);
-	    return betTime.getFullYear() + "-" +
-	           String(betTime.getMonth() + 1).padStart(2, "0") + "-" +
-	           String(betTime.getDate()).padStart(2, "0") + " " +
-	           String(betTime.getHours()).padStart(2, "0") + ":" +
-	           String(betTime.getMinutes()).padStart(2, "0");
-	}));
+		// ✅ Correction : S'assurer que l'heure locale est affichée sans décalage
+		const formattedTimestamp = parisTimestamp.toLocaleString("fr-FR", {
+			timeZone: "UTC" // Affichage direct en UTC pour éviter tout décalage
+		});
 
         row.innerHTML = `
             <td>${odd.sport}</td>
@@ -183,11 +172,14 @@ function displayOdds(odds) {
             <td class="profit">${odd.profit}%</td>
             <td>${formattedTimestamp}</td> <!-- Affichage avec fuseau horaire "Europe/Paris" -->
         `;
-        tableBody.appendChild(row);
+        fragment.appendChild(row);
+
 
         totalROI += parseFloat(odd.profit || 0);
         countBets++;
     });
+	tableBody.innerHTML = "";
+    tableBody.appendChild(fragment);
 
     updateStats(odds);
 	updateChart(odds);
@@ -313,13 +305,12 @@ function filterByBookmakers() {
     document.getElementById("filtered-opportunities").textContent = totalOpportunities;
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
     const loader = document.getElementById("loader");
     const mainContent = document.getElementById("main-content");
 
-    loadFromCache(); // ✅ Affiche les données en cache si présentes
-
-    await fetchOdds(); // 🔁 Recharge les vraies données ensuite
+    // 1. Afficher immédiatement les données en cache
+    const cacheUsed = loadFromCache();
 
     const checkDataLoaded = () => {
         const rows = document.querySelectorAll("#odds-table tr");
@@ -332,7 +323,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     checkDataLoaded();
+
+    // 2. Ensuite, en fond, on met à jour avec les vraies données
+    if (!cacheUsed) {
+        fetchOdds(); // 🔁 Si aucun cache, on charge tout de suite
+    } else {
+        setTimeout(fetchOdds, 500); // 🕓 Sinon, on laisse l'affichage et on met à jour après 500ms
+    }
 });
+
 
 
 let chartInstance = null;
