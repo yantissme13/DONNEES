@@ -311,15 +311,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 1. Afficher immédiatement les données en cache
     const cacheUsed = loadFromCache();
+	let progress = 0;
+	const progressBarFill = document.getElementById("progress-bar-fill");
+
+	const progressInterval = setInterval(() => {
+		if (progress < 95) {
+			progress += 1;
+			progressBarFill.style.width = progress + "%";
+		} else {
+			clearInterval(progressInterval); // on arrête la simulation à 95%
+		}
+	}, 20);
+
 
     const checkDataLoaded = () => {
         const rows = document.querySelectorAll("#odds-table tr");
         if (rows.length > 0) {
-            loader.style.display = "none";
-            mainContent.style.display = "block";
-        } else {
-            setTimeout(checkDataLoaded, 300);
-        }
+			progress = 100;
+			progressBarFill.style.width = "100%";
+			setTimeout(() => {
+				loader.style.display = "none";
+				mainContent.style.display = "block";
+			}, 300); // petit délai pour que 100% s'affiche bien
+		} else {
+			setTimeout(checkDataLoaded, 300);
+		}
     };
 
     checkDataLoaded();

@@ -9,10 +9,13 @@
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-	<!-- Loader -->
-	<div id="loader" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-		<h2>Chargement des données en cours...</h2>
+	<div id="loader" class="loader-container">
+		<div class="loader-text">Chargement des données en cours...</div>
+		<div class="progress-bar">
+			<div id="progress-bar-fill" class="progress-bar-fill"></div>
+		</div>
 	</div>
+
 
 	<!-- Contenu principal -->
 	<div id="main-content" style="display: none;">
